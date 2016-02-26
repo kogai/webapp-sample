@@ -16,5 +16,19 @@ func main() {
 		})
 	})
 
+	router.GET("/account/register", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "account/regiser", gin.H{
+			"title": "title:ハロー、ワールド",
+			"stuff": ":ハロー、ワールド",
+		})
+	})
+
+	router.POST("/api/v1/register", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "ok",
+			"status":  200,
+		})
+	})
+
 	router.Run(":8080")
 }
