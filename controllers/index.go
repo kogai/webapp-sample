@@ -1,16 +1,13 @@
 package controllers
 
 import (
+	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
-	// "log"
+	"log"
 	"net/http"
 )
 
 type handlers map[string]gin.HandlerFunc
-type account struct {
-	User     string `form:"user" json:"user" binding:"required"`
-	Password string `form:"password" json:"password" binding:"required"`
-}
 
 func getRoute(c *gin.Context) {
 	c.HTML(http.StatusOK, "index", gin.H{
@@ -19,33 +16,28 @@ func getRoute(c *gin.Context) {
 	})
 }
 
+func authorization(c *gin.Context) {
+	session := sessions.Default(c)
+	sessionId := session.Get("sessionId")
+	if sessionId == nil {
+		c.Redirect(http.StatusMovedPermanently, "/login")
+		return
+	}
+	log.Println(sessionId, " is authorized.")
+}
+
 var routeHandlers handlers = handlers{
 	"GET": getRoute,
 }
 
 func SetRouters(router *gin.Engine) {
-	router.GET("/", routeHandlers["GET"])
+	// 認証が必要なページ
+	authorized := router.Group("/", authorization)
+	authorized.GET("/", routeHandlers["GET"])
 
+	// 認証が不要なページ
 	router.GET("/login", loginHandlers["GET"])
 	router.POST("/login", loginHandlers["POST"])
-
 	router.GET("/register", registerHandlers["GET"])
 	router.POST("/register", registerHandlers["POST"])
-
-	/*
-		authorized := router.Group("/", func(c *gin.Context) {
-			session := sessions.Default(c)
-			sessionId := session.Get("sessionId")
-			if sessionId == nil {
-				log.Println("This session not authorized.")
-				return
-			}
-			log.Println(sessionId, " is authorized.")
-		})
-
-		authorized.GET("/secrets", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{"user": "user"})
-		})
-
-	*/
 }

@@ -1,11 +1,12 @@
 {{define "register"}}
 {{template "header" . }}
-  <h1>登録画面</h1>
-  <form action="/api/v1/register" method="POST">
-    <input type="email">
-    <input type="password">
-    <button type="submit">登録する</button>
-  </form>
+
+<h1>登録画面</h1>
+<div id="s-register">
+  <input type="text">
+  <input type="password">
+  <button>登録する</button>
+</div>
 
 {{template "footer" . }}
 {{end}}

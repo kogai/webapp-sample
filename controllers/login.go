@@ -6,6 +6,11 @@ import (
 	"net/http"
 )
 
+type account struct {
+	User     string `json:"user" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
 func getLogin(c *gin.Context) {
 	c.HTML(http.StatusOK, "login", gin.H{
 		"title": "ログイン画面",
@@ -14,17 +19,32 @@ func getLogin(c *gin.Context) {
 }
 
 func postLogin(c *gin.Context) {
+	// Authentication
+
 	var form account
-	if c.Bind(&form) == nil {
-		if form.User == "manu" && form.Password == "123" {
-			session := sessions.Default(c)
-			session.Set("sessionId", "my-session-id")
-			session.Save()
-			c.JSON(http.StatusOK, gin.H{"status": "you are logged in"})
-		} else {
-			c.JSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
-		}
+	err := c.Bind(&form)
+
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
+		return
 	}
+
+	// 仮にuser=manu password=123のアカウントのみ認可している
+	if form.User != "manu" && form.Password != "123" {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  401,
+			"message": "un authorized",
+		})
+		return
+	}
+
+	session := sessions.Default(c)
+	session.Set("sessionId", form.User)
+	session.Save()
+	c.JSON(http.StatusOK, gin.H{
+		"status":  "200",
+		"message": "ok",
+	})
 }
 
 var loginHandlers handlers = handlers{

@@ -1,11 +1,12 @@
 {{define "login"}}
 {{template "header" . }}
-  <h1>ログイン画面</h1>
-  <form action="/login" method="POST">
-    <input type="text" name="user">
-    <input type="password" name="password">
-    <button type="submit">ログイン</button>
-  </form>
+
+<h1>ログイン画面</h1>
+<div id="s-login">
+  <input type="text">
+  <input type="password">
+  <button>ログイン</button>
+</div>
 
 {{template "footer" . }}
 {{end}}
