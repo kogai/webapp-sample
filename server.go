@@ -15,7 +15,7 @@ type Login struct {
 
 func main() {
 	router := gin.Default()
-	router.LoadHTMLGlob("templates/*")
+	router.LoadHTMLGlob("templates/**/*")
 
 	store := sessions.NewCookieStore([]byte("my-cookie-secret"))
 	router.Use(sessions.Sessions("my-session", store))
