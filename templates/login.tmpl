@@ -1,9 +1,11 @@
-{{define "account/login"}}
+{{define "login"}}
+{{template "header" . }}
+  <h1>ログイン画面</h1>
+  <form action="/login" method="POST">
+    <input type="text" name="user">
+    <input type="password" name="password">
+    <button type="submit">ログイン</button>
+  </form>
 
-<form action="/login" method="POST">
-  <input type="text" name="user">
-  <input type="password" name="password">
-  <button type="submit">ログイン</button>
-</form>
-
+{{template "footer" . }}
 {{end}}

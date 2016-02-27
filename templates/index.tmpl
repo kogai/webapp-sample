@@ -1,3 +1,8 @@
-{{define "content"}}
-{{.stuff}}
+{{define "index"}}
+{{template "header" . }}
+
+  <h1>レイアウトテンプレート</h1>
+  <h2>{{.stuff}}</h2>
+
+{{template "footer" . }}
 {{end}}
